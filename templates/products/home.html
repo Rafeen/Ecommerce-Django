@@ -1,4 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Home</h1>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-sm-4">
+                {% for item in product.productimage_set.all %}
+                    {% if item.featured %}
+                        <img src="{{ item.image.url }}" alt="{{ item }}"/>
+                    {% endif %}
+
+                {% endfor %}
+
+                {{ product }}
+            </div>
+            {% cycle "" "" "</div><div class='row'>" %}
+        {% endfor %}
+    </div>
+
 {% endblock %}
