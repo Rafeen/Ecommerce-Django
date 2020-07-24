@@ -73,7 +73,7 @@ class LoginView(View):
             else:
                 # Return an 'invalid login' error message.
                 print("Error")
-        return render(request, "auth/login.html", context)
+        return redirect('home')
 
 
 class RegisterView(View):

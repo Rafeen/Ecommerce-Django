@@ -1,6 +1,13 @@
+{% extends 'base.html' %}
+
 {% block content %}
-    {{ title }}
-    {% for product in product_list %}
-        <li><a href="{{ product.get_absolute_url }}">{{ product }}-{{ product.price }}</a></li>
-    {% endfor %}
+    <div class="container">
+        <div class="row">
+            {% for product in product_list %}
+                <div class="col">
+            {% include 'products/snippets/card.html' with instance=product %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

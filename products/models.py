@@ -3,7 +3,7 @@ import os
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
-from django.shortcuts import reverse
+from django.urls import reverse
 
 
 def get_image_ext(filepath):
@@ -54,7 +54,7 @@ class Product(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('products:product-detail', kwargs={"slug": self.slug})
+        return reverse('products:detail', kwargs={"slug": self.slug})
 
 
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
