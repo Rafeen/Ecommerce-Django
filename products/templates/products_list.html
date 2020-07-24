@@ -1,0 +1,6 @@
+{% block content %}
+    {{ title }}
+    {% for product in product_list %}
+        <li><a href="{{ product.get_absolute_url }}">{{ product }}-{{ product.price }}</a></li>
+    {% endfor %}
+{% endblock %}
