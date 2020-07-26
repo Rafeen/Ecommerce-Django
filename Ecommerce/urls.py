@@ -27,7 +27,9 @@ urlpatterns = [
     path('contact/', ContactView.as_view(), name="contact"),
     path('login/', LoginView.as_view(), name="login"),
     path('register/', RegisterView.as_view(), name="register"),
+
     path('products/', include("products.urls", namespace='products')),
+    path('search/', include("search.urls", namespace='search')),
 ]
 
 if settings.DEBUG:

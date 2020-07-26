@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row mb-3">
+        {%  if query %}
+            <div class="col-12 mb-3">
+                Searched for <strong>{{ query}}</strong>
+                <hr>
+            </div>
+        {% else %}
+            <div class="col-12 col-md-6 mx-auto py-5">
+               {% include 'snippets/search_form.html' %}
+            </div>
+            <div class="col-12">
+                <hr>
+            </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        {% for product in product_list %}
+            <div class="col">
+                {% include 'products/snippets/card.html' with instance=product %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
