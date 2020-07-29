@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import Http404, HttpResponse
 
 from .models import Product
-
+from carts.models import Cart
 
 # class HomeView(TemplateView):
 #     template_name = "product/home_page.html"
@@ -58,8 +58,12 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
     def get_context_data(self, *args, **kwargs):
+        request = self.request
         context = super(ProductDetailView, self).get_context_data(*args, **kwargs)
         context['title'] = "Product Details"
+        cart_obj, new_obj = Cart.objects.new_or_get(request)
+        context['cart'] = cart_obj
+
         return context
 
     def get_object(self, *args, **kwargs):

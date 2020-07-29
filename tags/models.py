@@ -9,7 +9,7 @@ class Tag(models.Model):
     slug = models.SlugField()
     timestamp = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
-    products = models.ManyToManyField(Product, blank=True, null=True)
+    products = models.ManyToManyField(Product, blank=True)
 
     def __str__(self):
         return self.title

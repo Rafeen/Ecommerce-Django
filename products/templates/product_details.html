@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <div class="row">
-            <div class="col">
-                {% if product.image %}
-                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.title }}">
-                {% endif %}
-                <h1>{{ product.title }}</h1>
-                {{ product.price }}
-                {{ product.description|linebreaks }}
-            </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            {% if product.image %}
+                <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.title }}">
+            {% endif %}
+            <h1>{{ product.title }}</h1>
+            {{ product.price }}
+            {{ product.description|linebreaks }}
         </div>
+        <div class="col-12 col-md-6">
+            {% include 'products/snippets/update_cart.html' with product=product cart=cart%}
+        </div>
+
+    </div>
 {% endblock %}

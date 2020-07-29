@@ -82,6 +82,10 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('products:detail', kwargs={"slug": self.slug})
 
+    @property
+    def name(self):
+        return self.title
+
 
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
