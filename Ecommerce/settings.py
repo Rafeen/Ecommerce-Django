@@ -39,11 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom Apps
+    "accounts",
+    "billing",
+    "carts",
+    "orders",
     "products",
     "search",
     "tags",
-    "carts",
-    "orders",
+
 ]
 
 MIDDLEWARE = [
@@ -55,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 ROOT_URLCONF = 'Ecommerce.urls'
 
 TEMPLATES = [
@@ -81,27 +83,27 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': "Ecommerce",
-        'USER': "admin",
-        'PASSWORD': "admin",
-        'HOST': "127.0.0.1",
-        'PORT': "5432",
-    }
-}
-#
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': "Ecommerce",
-#         'USER': "root",
+#         'USER': "admin",
 #         'PASSWORD': "admin",
 #         'HOST': "127.0.0.1",
-#         'PORT': "3306",
+#         'PORT': "5432",
 #     }
 # }
+#
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "Ecommerce",
+        'USER': "root",
+        'PASSWORD': "",
+        'HOST': "127.0.0.1",
+        'PORT': "3306",
+    }
+}
 
 
 # Password validation
@@ -148,3 +150,6 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "static_cdn", "media_root")
+
+LOGOUT_REDIRECT_URL = '/login/'
+# AUTH_USER_MODEL = 'accounts.CustomUserModel'

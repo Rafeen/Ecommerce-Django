@@ -1,3 +1,4 @@
+import math
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 
@@ -19,8 +20,8 @@ class Order(models.Model):
     # shipping_address =
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
-    shipping_total = models.DecimalField(decimal_places=2, max_digits=100, default=0.00)
-    total = models.DecimalField(decimal_places=2, max_digits=100, default=0.00)
+    shipping_total = models.DecimalField(decimal_places=2, max_digits=15, default=0.00)
+    total = models.DecimalField(decimal_places=2, max_digits=15, default=0.00)
 
     def __str__(self):
         return self.order_id
@@ -28,11 +29,11 @@ class Order(models.Model):
     def update_total(self):
         cart_total = self.cart.total
         shipping_total = self.shipping_total
-        new_total = cart_total + shipping_total
+        new_total = math.fsum([cart_total, shipping_total])
+        new_total = format(new_total, '.2f')
         self.total = new_total
         self.save()
         return new_total
-
 
 
 def pre_save_create_order_id(sender, instance,*args, **kwargs):

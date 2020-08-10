@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import HomeView, AboutView, ContactView, LoginView, RegisterView
+from .views import HomeView, AboutView, ContactView
 
 
 urlpatterns = [
@@ -25,9 +25,8 @@ urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('about/', AboutView.as_view(), name="about"),
     path('contact/', ContactView.as_view(), name="contact"),
-    path('login/', LoginView.as_view(), name="login"),
-    path('register/', RegisterView.as_view(), name="register"),
 
+    path('', include("accounts.urls", namespace='account')),
     path('products/', include("products.urls", namespace='products')),
     path('search/', include("search.urls", namespace='search')),
     path('cart/', include("carts.urls", namespace='cart')),
