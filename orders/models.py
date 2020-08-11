@@ -24,7 +24,6 @@ class OrderManager(models.Manager):
                                         cart=cart_obj,
                                         active=True)
         if qs.count() == 1:
-            created = False
             obj = qs.first()
         else:
             obj = self.models.objects.create(billing_profile=billing_profile,
@@ -48,7 +47,7 @@ class Order(models.Model):
     def __str__(self):
         return self.order_id
 
-    object = OrderManager
+    objects = OrderManager()
 
     def update_total(self):
         """

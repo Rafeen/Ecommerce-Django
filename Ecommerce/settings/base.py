@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
 
     # Custom Apps
     "accounts",
@@ -94,16 +96,7 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 #     }
 # }
 #
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "Ecommerce",
-        'USER': "root",
-        'PASSWORD': "",
-        'HOST': "127.0.0.1",
-        'PORT': "3306",
-    }
-}
+
 
 
 # Password validation

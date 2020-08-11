@@ -86,7 +86,7 @@ def checkout(request):
         """
         if there is a billing profile only then create order
         """
-        order_obj, order_obj_created = Order.object.new_or_get(billing_profile, cart_obj)
+        order_obj, order_obj_created = Order.objects.new_or_get(billing_profile, cart_obj)
 
     context = {
         'order': order_obj,
