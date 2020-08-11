@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+    {{ order }}---{{ order.cart }}
     {% if not billing_profile %}
         <div class="row text-center">
             <div class="col-12 col-md-6">

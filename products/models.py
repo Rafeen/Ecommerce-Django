@@ -8,12 +8,18 @@ from django.urls import reverse
 
 
 def get_image_ext(filepath):
+    """
+    extracts image extensions
+    """
     base_name = os.path.basename(filepath)
     name, ext = os.path.splitext(base_name)
     return name, ext
 
 
 def upload_image_path(instance,filename):
+    """
+     defines upload directory for product image
+    """
     name, ext = get_image_ext(filename)
     instance_name = instance.title.replace(" ",'-')
     new_filename = random.randint(1,3910209312)
@@ -29,6 +35,10 @@ class ProductQuerySet(models.query.QuerySet):
         return self.filter(active=True, featured=True)
 
     def search(self, query):
+        """
+         custom queryset for search with
+          title description price and tags
+        """
         lookups = (
                 Q(title__icontains=query) |
                 Q(description__icontains=query) |
@@ -88,6 +98,9 @@ class Product(models.Model):
 
 
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
+    """
+     this pre_save signal creates unique slug for created products
+    """
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 

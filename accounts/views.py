@@ -7,9 +7,15 @@ from .models import GuestEmail
 
 
 class GuestRegisterView(View):
+    """
+     This view if for guest email input for guest checkout
+    """
     template_name = 'accounts/login.html'
 
     def get(self, request, *args, **kwargs):
+        """
+         get request renders page with guest form
+        """
         form = GuestForm()
         context = {
             "title": "Guest",
@@ -18,6 +24,9 @@ class GuestRegisterView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        """
+         post request registers guest email and redirects to the next(order) page
+        """
         form = GuestForm(request.POST or None)
         context = {
             "title": "Guest",
@@ -38,9 +47,15 @@ class GuestRegisterView(View):
 
 
 class LoginView(View):
+    """
+     Login view
+    """
     template_name = 'accounts/login.html'
 
     def get(self, request, *args, **kwargs):
+        """
+        get request renders page with login form
+        """
         form = LoginForm()
         context = {
             "title": "Login",
@@ -49,6 +64,9 @@ class LoginView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        """
+            post request gets data and logs in user
+        """
         form = LoginForm(request.POST or None)
         context = {
             "title": "Login",
@@ -63,6 +81,11 @@ class LoginView(View):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                try:
+                    del request.session['guest_email_id']
+
+                except:
+                    pass
                 if is_safe_url(redirect_path, request.get_host()):
                     return redirect(redirect_path)
                 else:
@@ -74,10 +97,16 @@ class LoginView(View):
 
 
 class RegisterView(View):
+    """
+     Register view
+    """
     template_name = 'accounts/register.html'
     User = get_user_model()
 
     def get(self, request, *args, **kwargs):
+        """
+         get request renders page with register form
+         """
         form = RegisterForm()
         context = {
             "title": "Register",
@@ -86,13 +115,15 @@ class RegisterView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        """
+              post request gets data and registers in user
+        """
         form = RegisterForm(request.POST or None)
         context = {
             "title": "Register",
             "form": form
         }
         if form.is_valid():
-            print(form.cleaned_data)
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
             email = form.cleaned_data.get("email")

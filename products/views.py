@@ -18,6 +18,9 @@ from carts.models import Cart
 
 
 class ProductFeaturedListView(ListView):
+    """
+     view for showing featured products list
+    """
     model = Product
     queryset = Product.objects.featured()
     template_name = "products_list.html"
@@ -30,6 +33,9 @@ class ProductFeaturedListView(ListView):
 
 
 class ProductFeaturedDetailView(DetailView):
+    """
+      view for showing featured products details
+     """
     model = Product
     queryset = Product.objects.featured()
     template_name = "featured_product_details.html"
@@ -42,6 +48,9 @@ class ProductFeaturedDetailView(DetailView):
 
 
 class ProductListView(ListView):
+    """
+      view for showing products list
+     """
     model = Product
     template_name = "products_list.html"
     context_object_name = 'product_list'
@@ -53,6 +62,9 @@ class ProductListView(ListView):
 
 
 class ProductDetailView(DetailView):
+    """
+      view for showing products detail
+     """
     model = Product
     template_name = "product_details.html"
     context_object_name = 'product'

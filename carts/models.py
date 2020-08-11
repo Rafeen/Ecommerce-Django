@@ -9,13 +9,18 @@ User = settings.AUTH_USER_MODEL
 
 class CartManager(models.Manager):
     def new_or_get(self, request):
+        """
+         creates new cart or gets existing cart
+         if user is authenticated then assign cart
+         to the user from session
+        """
         cart_id = request.session.get("cart_id", None)
         qs = self.get_queryset().filter(id=cart_id)
         if qs.count() == 1:
             new_obj = False
             cart_obj = qs.first()
             if request.user.is_authenticated and cart_obj.user is None:
-                Cart.objects.filter(user=request.user).delete()  # one user should have only one cart
+                # Cart.objects.filter(user=request.user).delete()  # one user should have only one cart
                 cart_obj.user = request.user
                 cart_obj.save()
         else:
@@ -25,6 +30,9 @@ class CartManager(models.Manager):
         return cart_obj, new_obj
 
     def new(self, user=None):
+        """
+         creates new cart for user object
+        """
         user_obj = None
         if user is not None and user.is_authenticated:
             user_obj = user
@@ -46,6 +54,10 @@ class Cart(models.Model):
 
 
 def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
+    """
+     this m2m_changed signal updates cart total
+     after adding or removing each product
+    """
     if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
         cart = instance.products.all()
         total = 0
@@ -60,6 +72,10 @@ m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.products.through)
 
 
 def pre_save_cart_receiver(sender, instance, *args, **kwargs):
+    """
+     this pre_save signal updates
+     subtotal with 5% tax calculation
+    """
     if instance.subtotal > 0:
         instance.total = format(Decimal(instance.subtotal) * Decimal(1.05), '.0f')    # 5% tax
     else:

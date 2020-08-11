@@ -17,9 +17,13 @@ class BillingProfile(models.Model):
         return self.email
 
 
-def user_created_receiver(sender, instance, created, *args, **kwargs):
+def post_save_user_created_receiver(sender, instance, created, *args, **kwargs):
+    """
+     this post save receiver adds
+     registered user's email to BillingProfile
+    """
     if created and instance.email:
         BillingProfile.objects.get_or_create(user=instance, email=instance.email)
 
 
-post_save.connect(user_created_receiver, sender=User)
+post_save.connect(post_save_user_created_receiver, sender=User)

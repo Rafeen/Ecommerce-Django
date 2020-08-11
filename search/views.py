@@ -5,6 +5,9 @@ from products.models import Product
 
 
 class SearchProductListView(ListView):
+    """
+      view for showing searched products list
+     """
     model = Product
     template_name = "search_view.html"
     context_object_name = 'product_list'
