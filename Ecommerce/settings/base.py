@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # Custom Apps
     "accounts",
+    "addresses",
     "billing",
     "carts",
     "orders",
@@ -145,4 +146,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "static_cdn", "media_root")
 
 LOGOUT_REDIRECT_URL = '/login/'
-# AUTH_USER_MODEL = 'accounts.CustomUserModel'
+
+# from django.contrib.auth.models import User
+# AUTH_USER_MODEL = User

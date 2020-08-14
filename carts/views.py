@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
+
 from .models import Cart
+from addresses.models import Address
 from products.models import Product
 from orders.models import Order
-from accounts.forms import LoginForm, GuestForm
 from billing.models import BillingProfile
-from accounts.models import GuestEmail
+
+from accounts.forms import LoginForm, GuestForm
+from addresses.forms import AddressForm
 
 
 class CartView(View):
@@ -23,7 +26,6 @@ class CartView(View):
         context = {
             'cart': cart_obj,
         }
-
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -51,51 +53,62 @@ class CartView(View):
         return redirect('cart:cart-product')
 
 
-def checkout(request):
+def checkout_process_view(request):
     """
-     view for checkout process
+     change order status to done after checking out
+     when order is checked out cart id in the session should be cleared
+     redirect to success
      """
     template_name = 'checkout.html'
     cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
     if cart_created or cart_obj.products.count() == 0:
         return redirect('cart:cart-product')
-    user = request.user
-    billing_profile = None
+
     login_form = LoginForm()
     guest_form = GuestForm()
-    guest_email_id = request.session.get('guest_email_id')
-    if user.is_authenticated:
-        """
-        logged in user checkout, 
-        will remember payment stuffs
-        """
-        billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(user=user, email=user.email)
+    address_form = AddressForm()
+    billing_address_id = request.session.get("billing_address_id", None)
+    shipping_address_id = request.session.get("shipping_address_id", None)
 
-    elif guest_email_id is not None:
-        """
-        Guest in user checkout
-        auto reloads payment stuffs
-        """
-        guest_email_obj = GuestEmail.objects.get(id=guest_email_id)
-        billing_profile, billing_guest_profile_created = BillingProfile.objects.get_or_create(email=guest_email_obj.email)
-    else:
-        pass
-
+    billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)
+    address_qs = None
     if billing_profile is not None:
-        """
-        if there is a billing profile only then create order
-        """
+        if request.user.is_authenticated:
+            address_qs = Address.objects.filter(billing_profile=billing_profile)
         order_obj, order_obj_created = Order.objects.new_or_get(billing_profile, cart_obj)
+        if shipping_address_id:
+            order_obj.shipping_address = Address.objects.get(id=shipping_address_id)
+            del request.session["shipping_address_id"]
+        if billing_address_id:
+            order_obj.billing_address = Address.objects.get(id=billing_address_id)
+            del request.session["billing_address_id"]
+        if billing_address_id or shipping_address_id:
+            order_obj.save()
 
+    if request.method == "POST":
+        "check that order is done"
+        is_done = order_obj.check_done()
+        if is_done:
+            order_obj.mark_paid()
+            request.session['cart_items'] = 0
+            del request.session['cart_id']
+            return redirect('cart:checkout-done')
     context = {
         'order': order_obj,
         'billing_profile': billing_profile,
         'login_form': login_form,
         'guest_form': guest_form,
+        'address_form': address_form,
+        'address_qs': address_qs,
     }
     return render(request, template_name, context)
 
+
+def checkout_success_view(request):
+    template_name = 'checkout-done.html'
+    context = {}
+    return render(request, template_name, context)
 
 
 
