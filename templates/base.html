@@ -22,6 +22,44 @@
     {% include 'base/js.html' %}
     <script>
         $(document).ready(function(){
+            // auto search
+            var searchForm = $(".search-form");
+            var searchInput = searchForm.find("[name='q']");
+            var searchBtn = searchForm.find("[type='submit']");
+            var typingTimer;
+            var typingInterval = 500;
+
+            searchInput.keyup(function (event) {
+                // key up
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(performSearch, typingInterval)
+            });
+             searchInput.keydown(function (event) {
+                 // key down
+                clearTimeout(typingTimer);
+            });
+             function displaySearching() {
+                 searchBtn.addClass("disabled");
+                 searchBtn.html("<i class='fa fa-spinner fa-spin'></i>Searching...");
+             }
+            function performSearch() {
+                displaySearching()
+                var query = searchInput.val();
+                setTimeout(function () {
+                    window.location.href = '/search/?q=' + query
+
+                },1000)
+            }
+
+
+
+
+
+
+
+
+
+            // cart and add product
             var productForm = $(".form-product-ajax") // #form-product-ajax
 
             productForm.submit(function(event){
