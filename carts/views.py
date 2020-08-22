@@ -11,6 +11,23 @@ from accounts.forms import LoginForm, GuestForm
 from addresses.forms import AddressForm
 
 
+def cart_update_api_view(request):
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    products = [{
+                 "id": product.id,
+                 "url": product.get_absolute_url(),
+                 "title": product.title,
+                 "price": product.price,
+                 } for product in cart_obj.products.all()]
+    cart_data = {
+
+        "products": products,
+        "subtotal": cart_obj.subtotal,
+        "total": cart_obj.total,
+    }
+    return JsonResponse(cart_data)
+
+
 class CartView(View):
     """
     cart view
@@ -22,6 +39,8 @@ class CartView(View):
         For get request only renders the cart with items
         """
         cart_obj, new_obj = Cart.objects.new_or_get(request)
+        cart_item_count = cart_obj.products.count()
+        request.session['cart_items'] = cart_item_count
 
         context = {
             'cart': cart_obj,

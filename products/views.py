@@ -56,7 +56,10 @@ class ProductListView(ListView):
     context_object_name = 'product_list'
 
     def get_context_data(self, *args, **kwargs):
+        request = self.request
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
+        cart_obj, new_obj = Cart.objects.new_or_get(request)
+        context['cart'] = cart_obj
         context['title'] = "Products"
         return context
 
