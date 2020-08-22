@@ -3,14 +3,25 @@ from .base import *
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1']
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': "Ecommerce",
+#         'USER': "root",
+#         'PASSWORD': "",
+#         'HOST': "127.0.0.1",
+#         'PORT': "3306",
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': "Ecommerce",
-        'USER': "root",
-        'PASSWORD': "",
+        'USER': "admin",
+        'PASSWORD': "admin",
         'HOST': "127.0.0.1",
-        'PORT': "3306",
+        'PORT': "5432",
     }
 }
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-
+from django.http import JsonResponse
 from .models import Cart
 from addresses.models import Address
 from products.models import Product
@@ -36,6 +36,7 @@ class CartView(View):
         request = self.request
         product_id = request.POST.get('product_id')
 
+
         if product_id is not None:
             try:
                 product_obj = Product.objects.get_by_id(product_id)
@@ -46,9 +47,20 @@ class CartView(View):
             cart_obj, new_obj = Cart.objects.new_or_get(request)
             if product_obj in cart_obj.products.all():
                 cart_obj.products.remove(product_obj)
+                added = False
+
             else:
                 cart_obj.products.add(product_obj)
-            request.session['cart_items'] = cart_obj.products.count()
+                added = True
+            cart_item_count = cart_obj.products.count()
+            request.session['cart_items'] = cart_item_count
+            if request.is_ajax():
+                json_data = {
+                    "added": added,
+                    "removed": not added,
+                    "count": cart_item_count,
+                }
+                return JsonResponse(json_data)
 
         return redirect('cart:cart-product')
 
