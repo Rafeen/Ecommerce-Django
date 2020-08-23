@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, get_user_model
 from django.views.generic.base import TemplateView
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import ContactForm
@@ -44,6 +45,13 @@ class ContactView(View):
         }
         if form.is_valid():
             print(form.cleaned_data)
+            if request.is_ajax():
+                return JsonResponse({"message": "Thank you for your submission"})
+
+        if form.errors:
+            errors = form.errors.as_json()
+            if request.is_ajax():
+                return HttpResponse(errors, status=400, content_type='application/json')
         return render(request, self.template_name, context)
 
 
